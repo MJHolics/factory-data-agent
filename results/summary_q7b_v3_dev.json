@@ -1,0 +1,33 @@
+{
+ "s2": {
+  "n": 30,
+  "correct": 27,
+  "lucky": 0,
+  "wrong": 3,
+  "error": 0,
+  "abstain": 0,
+  "acc": 0.9,
+  "exec_rate": 1.0,
+  "plausible_wrong_share_of_executed": 0.1,
+  "naive_acc_single_db": 0.9,
+  "latency_p50": 0.525,
+  "by_trap": {
+   "cancelled": "11/14",
+   "control": "4/4",
+   "fanout": "0/2",
+   "metric_definition": "3/3",
+   "null_end": "3/3",
+   "period_clip": "5/5",
+   "planned_downtime": "4/4",
+   "ratio_of_sums": "3/4",
+   "return_sign": "2/2",
+   "shift_boundary": "2/2",
+   "timezone": "20/23",
+   "unit_box": "6/6"
+  },
+  "routes": {
+   "semantic": 26,
+   "fallback": 4
+  }
+ }
+}

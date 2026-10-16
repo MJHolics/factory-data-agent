@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>공장 데이터 질의</title>
+<meta name="description" content="공장 데이터에 말로 물으면 SQL로 답하되, 실행은 되는데 틀린 답을 의미 계층과 검증기로 잡는 시연. 계산은 브라우저 안 DuckDB.">
+<style>
+:root {
+  --bg: #f6f5f1; --card: #ffffff; --ink: #1d1d1b; --sub: #5d5b55; --line: #e2dfd6;
+  --bad: #b3261e; --bad-bg: #fbeceb; --ok: #1e6b3a; --ok-bg: #e8f4ec; --warn: #8a5a00; --warn-bg: #fdf3df;
+  --accent: #2f4f8f; --code: #f1efe8; --mono: ui-monospace, "Cascadia Code", Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #161614; --card: #201f1c; --ink: #ecebe6; --sub: #a9a69d; --line: #36342f;
+    --bad: #f2867e; --bad-bg: #3a1f1d; --ok: #7fd09a; --ok-bg: #1b3324; --warn: #f0c36a; --warn-bg: #3a2e14;
+    --accent: #9db7ef; --code: #2a2925;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #161614; --card: #201f1c; --ink: #ecebe6; --sub: #a9a69d; --line: #36342f;
+  --bad: #f2867e; --bad-bg: #3a1f1d; --ok: #7fd09a; --ok-bg: #1b3324; --warn: #f0c36a; --warn-bg: #3a2e14;
+  --accent: #9db7ef; --code: #2a2925;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.6 "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif; }
+.wrap { max-width: 1040px; margin: 0 auto; padding: 20px 16px 60px; }
+h1 { font-size: 24px; line-height: 1.35; margin: 8px 0 6px; letter-spacing: -0.02em; }
+h2 { font-size: 17px; margin: 28px 0 10px; }
+.lead { color: var(--sub); margin: 0 0 16px; }
+.scene { display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-start; margin: 14px 0 6px; }
+.bubble { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 8px 12px; max-width: 100%; }
+.bubble b { color: var(--accent); }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 14px; }
+.q { font-size: 18px; font-weight: 700; margin: 0 0 4px; }
+.traps { display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0 12px; }
+.chip { font-size: 12px; border: 1px solid var(--line); border-radius: 99px; padding: 1px 8px; color: var(--sub); }
+.cols { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+@media (max-width: 760px) { .cols { grid-template-columns: 1fr; } }
+.col { border: 1px solid var(--line); border-radius: 10px; padding: 10px; min-width: 0; }
+.col h3 { font-size: 13px; margin: 0 0 6px; color: var(--sub); font-weight: 600; }
+pre { background: var(--code); border-radius: 8px; padding: 8px; margin: 6px 0; font: 12px/1.5 var(--mono); white-space: pre-wrap; word-break: break-word; max-height: 190px; overflow: auto; }
+.res { font: 600 14px/1.4 var(--mono); padding: 6px 8px; border-radius: 8px; word-break: break-word; }
+.res.bad { background: var(--bad-bg); color: var(--bad); }
+.res.ok { background: var(--ok-bg); color: var(--ok); }
+.res.warn { background: var(--warn-bg); color: var(--warn); }
+.flags { margin: 6px 0 0; padding-left: 18px; font-size: 13px; color: var(--bad); }
+.bar { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin: 10px 0 0; }
+button, select { font: inherit; border: 1px solid var(--line); background: var(--card); color: var(--ink); border-radius: 8px; padding: 6px 10px; cursor: pointer; }
+button.primary { background: var(--accent); color: var(--card); border-color: var(--accent); }
+select { max-width: 100%; }
+textarea { width: 100%; min-height: 120px; font: 12px/1.5 var(--mono); background: var(--code); color: var(--ink); border: 1px solid var(--line); border-radius: 8px; padding: 8px; }
+table { border-collapse: collapse; width: 100%; font-size: 13px; }
+th, td { border-bottom: 1px solid var(--line); padding: 6px 6px; text-align: right; }
+th:first-child, td:first-child { text-align: left; }
+.tablewrap { overflow-x: auto; }
+.note { font-size: 12px; color: var(--sub); }
+.status { font-size: 12px; color: var(--sub); }
+.progress { height: 3px; background: var(--line); border-radius: 2px; overflow: hidden; margin-top: 10px; }
+.progress i { display: block; height: 100%; width: 0; background: var(--accent); transition: width linear; }
+a { color: var(--accent); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>공장 데이터, 말로 묻고<br>틀린 답은 잡는다</h1>
+  <p class="lead">어려운 건 답을 못 내는 게 아니라 <b>실행은 되고 숫자도 나오는데 틀린 답</b>이다. 가상 공장 데이터에 현장에서 자주 생기는 함정을 넣고, 같은 로컬 7B 모델이 SQL을 바로 쓸 때와 지표 정의(의미 계층)를 거칠 때를 나란히 보여 준다.</p>
+  <div class="scene" aria-label="사용 장면">
+    <div class="bubble">생산관리자: <b>"지난주 3라인 불량률 왜 올랐어?"</b></div>
+    <div class="bubble">에이전트: 지난주 3라인 불량률 7.5%(평소 2.9%). 같은 주 프레스 E07 비계획 정지 21회.</div>
+  </div>
+  <p class="status" id="status">데이터를 불러오는 중…</p>
+
+  <h2>시연 — 같은 질문, 두 가지 방법</h2>
+  <div class="card" id="demo">
+    <p class="q" id="dq">…</p>
+    <div class="traps" id="dtraps"></div>
+    <div class="cols">
+      <div class="col"><h3>① LLM이 바로 쓴 SQL</h3><pre id="d1sql"></pre><div class="res" id="d1res"></div><ul class="flags" id="d1flags"></ul></div>
+      <div class="col"><h3>② 의미 계층 (LLM은 지표·조건만 고름)</h3><pre id="d2intent"></pre><pre id="d2sql"></pre><div class="res" id="d2res"></div></div>
+      <div class="col"><h3>③ 정답</h3><pre id="d3sql"></pre><div class="res" id="d3res"></div></div>
+    </div>
+    <div class="bar"><button id="prev">이전</button><button id="pause">멈춤</button><button id="next">다음</button><span class="note" id="dpos"></span></div>
+    <div class="progress"><i id="dprog"></i></div>
+  </div>
+
+  <h2>직접 해 보기</h2>
+  <div class="card">
+    <label class="note" for="pick">질문 고르기(82개)</label><br>
+    <select id="pick"></select>
+    <p class="note" id="pickinfo"></p>
+    <label class="note" for="sql">SQL을 고쳐서 실행해 보세요 — 결과를 정답과 대조하고, 검증기가 함정을 짚습니다.</label>
+    <textarea id="sql" spellcheck="false"></textarea>
+    <div class="bar"><button class="primary" id="run">실행</button><button id="fillgold">정답 SQL 보기</button><button id="fillsem">의미 계층 SQL 보기</button></div>
+    <div class="res" id="myres" style="margin-top:8px"></div>
+    <ul class="flags" id="myflags"></ul>
+  </div>
+
+  <h2>숫자로 — test 52문항, Qwen2.5-7B(로컬)</h2>
+  <div class="card tablewrap" id="nums"><p class="note">측정 결과를 불러오는 중…</p></div>
+
+  <h2>함정 목록</h2>
+  <div class="card"><ul id="glossary" class="note"></ul></div>
+
+  <p class="note" style="margin-top:24px">재생인 것: LLM이 쓴 SQL과 고른 지표(로컬 vLLM 실행 기록). 계산인 것: 모든 SQL의 실행 결과와 검증기 판정(브라우저 안 DuckDB-WASM). 검증기 브라우저판은 파이썬판(sqlglot)을 정규식으로 옮긴 근사다.
+  코드: <a href="https://github.com/MJHolics/factory-data-agent">github.com/MJHolics/factory-data-agent</a></p>
+</div>
+<script type="module" src="app.js"></script>
+</body>
+</html>

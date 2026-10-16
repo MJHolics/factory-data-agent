@@ -1,0 +1,133 @@
+{
+ "s0": {
+  "n": 52,
+  "correct": 3,
+  "lucky": 0,
+  "wrong": 30,
+  "error": 19,
+  "abstain": 0,
+  "acc": 0.058,
+  "exec_rate": 0.635,
+  "plausible_wrong_share_of_executed": 0.909,
+  "naive_acc_single_db": 0.058,
+  "latency_p50": 0.643,
+  "by_trap": {
+   "cancelled": "0/21",
+   "control": "3/10",
+   "fanout": "0/4",
+   "metric_definition": "0/5",
+   "null_end": "0/5",
+   "period_clip": "0/9",
+   "planned_downtime": "0/7",
+   "ratio_of_sums": "0/7",
+   "return_sign": "0/3",
+   "shift_boundary": "0/4",
+   "timezone": "0/38",
+   "unit_box": "0/9"
+  }
+ },
+ "s1": {
+  "n": 52,
+  "correct": 10,
+  "lucky": 0,
+  "wrong": 20,
+  "error": 22,
+  "abstain": 0,
+  "acc": 0.192,
+  "exec_rate": 0.577,
+  "plausible_wrong_share_of_executed": 0.667,
+  "naive_acc_single_db": 0.192,
+  "latency_p50": 0.755,
+  "by_trap": {
+   "cancelled": "2/21",
+   "control": "8/10",
+   "fanout": "0/4",
+   "metric_definition": "0/5",
+   "null_end": "0/5",
+   "period_clip": "0/9",
+   "planned_downtime": "0/7",
+   "ratio_of_sums": "0/7",
+   "return_sign": "0/3",
+   "shift_boundary": "1/4",
+   "timezone": "2/38",
+   "unit_box": "0/9"
+  }
+ },
+ "s1v": {
+  "n": 52,
+  "correct": 8,
+  "lucky": 0,
+  "wrong": 4,
+  "error": 22,
+  "abstain": 18,
+  "acc": 0.154,
+  "exec_rate": 0.231,
+  "plausible_wrong_share_of_executed": 0.333,
+  "naive_acc_single_db": 0.154,
+  "latency_p50": 1.543,
+  "by_trap": {
+   "cancelled": "0/21",
+   "control": "8/10",
+   "fanout": "0/4",
+   "metric_definition": "0/5",
+   "null_end": "0/5",
+   "period_clip": "0/9",
+   "planned_downtime": "0/7",
+   "ratio_of_sums": "0/7",
+   "return_sign": "0/3",
+   "shift_boundary": "0/4",
+   "timezone": "0/38",
+   "unit_box": "0/9"
+  },
+  "verifier_first_sql": {
+   "caught_wrong": 38,
+   "missed_wrong": 4,
+   "false_alarm": 2,
+   "passed_ok": 8,
+   "rules_on_wrong": {
+    "cancelled": 6,
+    "timezone": 33,
+    "avg_of_ratio": 6,
+    "fanout": 4,
+    "null_end": 2,
+    "unit_box": 6,
+    "txn_sign": 2
+   },
+   "rules_on_ok": {
+    "cancelled": 2,
+    "timezone": 2
+   }
+  }
+ },
+ "s2": {
+  "n": 52,
+  "correct": 50,
+  "lucky": 0,
+  "wrong": 2,
+  "error": 0,
+  "abstain": 0,
+  "acc": 0.962,
+  "exec_rate": 1.0,
+  "plausible_wrong_share_of_executed": 0.038,
+  "naive_acc_single_db": 0.962,
+  "latency_p50": 0.57,
+  "by_trap": {
+   "cancelled": "20/21",
+   "control": "10/10",
+   "fanout": "3/4",
+   "metric_definition": "5/5",
+   "null_end": "5/5",
+   "period_clip": "8/9",
+   "planned_downtime": "6/7",
+   "ratio_of_sums": "7/7",
+   "return_sign": "3/3",
+   "shift_boundary": "4/4",
+   "timezone": "36/38",
+   "unit_box": "9/9"
+  },
+  "routes": {
+   "semantic": 43,
+   "fallback": 9
+  }
+ }
+}

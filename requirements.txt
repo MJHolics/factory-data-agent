@@ -1,0 +1,9 @@
+duckdb==1.5.6
+sqlglot==30.22.0
+numpy
+pandas
+pyyaml
+pytest
+scipy
+openai
+psycopg[binary]

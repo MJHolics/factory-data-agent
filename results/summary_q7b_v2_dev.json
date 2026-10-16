@@ -1,0 +1,132 @@
+{
+ "s0": {
+  "n": 30,
+  "correct": 2,
+  "lucky": 1,
+  "wrong": 14,
+  "error": 13,
+  "abstain": 0,
+  "acc": 0.067,
+  "exec_rate": 0.567,
+  "plausible_wrong_share_of_executed": 0.882,
+  "naive_acc_single_db": 0.1,
+  "latency_p50": 0.952,
+  "by_trap": {
+   "cancelled": "0/14",
+   "control": "1/4",
+   "fanout": "0/2",
+   "metric_definition": "0/3",
+   "null_end": "0/3",
+   "period_clip": "1/5",
+   "planned_downtime": "0/4",
+   "ratio_of_sums": "0/4",
+   "return_sign": "0/2",
+   "shift_boundary": "0/2",
+   "timezone": "1/23",
+   "unit_box": "0/6"
+  }
+ },
+ "s1": {
+  "n": 30,
+  "correct": 7,
+  "lucky": 1,
+  "wrong": 11,
+  "error": 11,
+  "abstain": 0,
+  "acc": 0.233,
+  "exec_rate": 0.633,
+  "plausible_wrong_share_of_executed": 0.632,
+  "naive_acc_single_db": 0.267,
+  "latency_p50": 1.274,
+  "by_trap": {
+   "cancelled": "2/14",
+   "control": "4/4",
+   "fanout": "0/2",
+   "metric_definition": "0/3",
+   "null_end": "0/3",
+   "period_clip": "0/5",
+   "planned_downtime": "0/4",
+   "ratio_of_sums": "0/4",
+   "return_sign": "0/2",
+   "shift_boundary": "1/2",
+   "timezone": "3/23",
+   "unit_box": "0/6"
+  }
+ },
+ "s1v": {
+  "n": 30,
+  "correct": 4,
+  "lucky": 0,
+  "wrong": 5,
+  "error": 8,
+  "abstain": 13,
+  "acc": 0.133,
+  "exec_rate": 0.3,
+  "plausible_wrong_share_of_executed": 0.556,
+  "naive_acc_single_db": 0.133,
+  "latency_p50": 2.715,
+  "by_trap": {
+   "cancelled": "0/14",
+   "control": "4/4",
+   "fanout": "0/2",
+   "metric_definition": "0/3",
+   "null_end": "0/3",
+   "period_clip": "0/5",
+   "planned_downtime": "0/4",
+   "ratio_of_sums": "0/4",
+   "return_sign": "0/2",
+   "shift_boundary": "0/2",
+   "timezone": "0/23",
+   "unit_box": "0/6"
+  },
+  "verifier_first_sql": {
+   "caught_wrong": 19,
+   "missed_wrong": 4,
+   "false_alarm": 3,
+   "passed_ok": 4,
+   "rules_on_wrong": {
+    "timezone": 18,
+    "cancelled": 8,
+    "fanout": 2,
+    "null_end": 3,
+    "txn_sign": 1,
+    "parse": 1
+   },
+   "rules_on_ok": {
+    "timezone": 3,
+    "cancelled": 1
+   }
+  }
+ },
+ "s2": {
+  "n": 30,
+  "correct": 24,
+  "lucky": 0,
+  "wrong": 2,
+  "error": 1,
+  "abstain": 3,
+  "acc": 0.8,
+  "exec_rate": 0.867,
+  "plausible_wrong_share_of_executed": 0.077,
+  "naive_acc_single_db": 0.8,
+  "latency_p50": 0.648,
+  "by_trap": {
+   "cancelled": "8/14",
+   "control": "4/4",
+   "fanout": "0/2",
+   "metric_definition": "3/3",
+   "null_end": "3/3",
+   "period_clip": "5/5",
+   "planned_downtime": "4/4",
+   "ratio_of_sums": "3/4",
+   "return_sign": "2/2",
+   "shift_boundary": "1/2",
+   "timezone": "17/23",
+   "unit_box": "6/6"
+  },
+  "routes": {
+   "semantic": 22,
+   "fallback": 8
+  }
+ }
+}

@@ -1,0 +1,7 @@
+.venv/
+__pycache__/
+.pytest_cache/
+data/*.duckdb
+data/*.duckdb.wal
+data/parquet/
+results/run_*.log
